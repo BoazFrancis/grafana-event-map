@@ -1,0 +1,33 @@
+{
+  "type": "panel",
+  "name": "Events Map",
+  "id": "events-map-panel",
+
+  "info": {
+    "version": "0.0.1",
+    "description": "World map showing events by type and location",
+    "author": {
+      "name": "",
+      "url": ""
+    },
+    "keywords": ["events", "map", "panel"],
+    "links": [
+      {"name": "MIT Licence", "url": "https://github.com/BTplc/grafana-status-dot/blob/master/LICENSE"},
+      {"name": "Project Site", "url": "https://github.com/BTplc/grafana-status-dot"}
+    ],
+    "screenshots": [
+      {"name": "Status Dot", "path": "img/status_dot.png"},
+      {"name": "Status Dot Options", "path": "img/status_dot_options.png"},
+      {"name": "Status Dot Values", "path": "img/status_dot_values.png"}
+    ],
+    "logos": {
+      "small": "img/logo.jpg",
+      "large": "img/logo.jpg"
+    }
+  },
+
+  "dependencies": {
+    "grafanaVersion": "3.x.x",
+    "plugins": [ ]
+  }
+}

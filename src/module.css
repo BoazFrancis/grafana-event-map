@@ -1,0 +1,35 @@
+.vector-marker {
+  width: 35px;
+  height: 46px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  text-align: center;
+}
+
+.vector-marker path {
+  stroke: black;
+  stroke-opacity: 0.4;
+  stroke-width: 1;
+}
+.vector-marker.not-accepted {
+  opacity: 0.5;
+}
+
+.vector-marker i {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 32px;
+  color: #333;
+  margin: auto;
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+
+}
+
+.vector-marker .icon-white {
+  color: #fff;
+}
