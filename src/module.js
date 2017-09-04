@@ -31,8 +31,8 @@ this.options = {
   },
   map: {
     base_layer: 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy;' +
-                 '<a href="https://carto.com/attribution">CARTO</a>',
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="blank">OpenStreetMap</a>, &copy;' +
+                 '<a href="http://stamen.com" target="blank">Stamen Design</a>',
     view: {
       top_left:[ 58.744384, -8.329295 ],
       bottom_right:[ 49.983103, 1.719198 ],
