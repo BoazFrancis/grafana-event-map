@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk', './external/leaflet/leaflet', './external/leaflet/leaflet.css!', './external/font-awesome-4.7.0/css/font-awesome.min.css!'], function (_export, _context) {
+System.register(['lodash', './Markers', './module.css!', 'app/plugins/sdk', './external/leaflet/leaflet', './external/leaflet/leaflet.css!', './external/font-awesome-4.7.0/css/font-awesome.min.css!', './util/builder', './util/presenter'], function (_export, _context) {
   "use strict";
 
-  var _, injectVectorMarkers, MetricsPanelCtrl, leaflet, leafletCSS, fontawesome, _createClass, EventsMapCtrl;
+  var _, Markers, MetricsPanelCtrl, leaflet, leafletCSS, fontawesome, Builder, Presenter, _createClass, pinPath, panelDefaults, EventsMapCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -38,8 +38,8 @@ System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk
   return {
     setters: [function (_lodash) {
       _ = _lodash.default;
-    }, function (_injectMarkers) {
-      injectVectorMarkers = _injectMarkers.injectVectorMarkers;
+    }, function (_Markers) {
+      Markers = _Markers.Markers;
     }, function (_moduleCss) {}, function (_appPluginsSdk) {
       MetricsPanelCtrl = _appPluginsSdk.MetricsPanelCtrl;
     }, function (_externalLeafletLeaflet) {
@@ -48,6 +48,10 @@ System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk
       leafletCSS = _externalLeafletLeafletCss;
     }, function (_externalFontAwesome470CssFontAwesomeMinCss) {
       fontawesome = _externalFontAwesome470CssFontAwesomeMinCss;
+    }, function (_utilBuilder) {
+      Builder = _utilBuilder.Builder;
+    }, function (_utilPresenter) {
+      Presenter = _utilPresenter.Presenter;
     }],
     execute: function () {
       _createClass = function () {
@@ -68,6 +72,13 @@ System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk
         };
       }();
 
+      pinPath = 'M16,1 C7.7146,1 1,7.65636364 1,15.8648485 C1,' + '24.0760606 16,51 16,51 C16,51 31,24.0760606 31,' + '15.8648485 C31,7.65636364 24.2815,1 16,1 L16,1 Z';
+      panelDefaults = {
+        symbols: {},
+        base_layer: 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png',
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="blank">OpenStreetMap</a>, &copy;' + '<a href="http://stamen.com" target="blank">Stamen Design</a>'
+      };
+
       _export('PanelCtrl', _export('EventsMapCtrl', EventsMapCtrl = function (_MetricsPanelCtrl) {
         _inherits(EventsMapCtrl, _MetricsPanelCtrl);
 
@@ -76,16 +87,10 @@ System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk
 
           var _this = _possibleConstructorReturn(this, (EventsMapCtrl.__proto__ || Object.getPrototypeOf(EventsMapCtrl)).call(this, $scope, $injector));
 
-          // this.panelDefaults = {
-          //   mapCenter: '(0°, 0°)',
-          //   mapCenterLatitude: 0,
-          //   mapCenterLongitude: 0,
-          //   initialZoom: 1,
-          // }
-          //   _.defaults(this.panel, this.panelDefaults)
           _this.events.on('data-received', _this.onDataReceived.bind(_this));
           _this.events.on('render', _this.onRender.bind(_this));
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
+          _.defaults(_this.panel, panelDefaults);
 
           _this.options = {
             symbols: {
@@ -96,8 +101,6 @@ System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk
               engineer: { icon: "male", color: "#ff59f9" }
             },
             map: {
-              base_layer: 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png',
-              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="blank">OpenStreetMap</a>, &copy;' + '<a href="http://stamen.com" target="blank">Stamen Design</a>',
               view: {
                 top_left: [58.744384, -8.329295],
                 bottom_right: [49.983103, 1.719198],
@@ -105,61 +108,56 @@ System.register(['lodash', './inject-markers', './module.css!', 'app/plugins/sdk
               }
             }
           };
-          _this.markers = L.layerGroup([]);
-          _this.data = [{ type: "mso", coord: [52.15491, -1.6], timestamp: 123184937 }, { type: "session_drop", coord: [52.15491, 1], timestamp: 634789348 }, { type: "call_spike", coord: [55.95206, -3.19648], timestamp: 672384087 }, { type: "engineer", coord: [51.509865, -0.118092], timestamp: 7643409284 }, { type: "change", coord: [53.4105800, -2.9779400], timestamp: 1237698379 }, { type: "mso", coord: [51.541148, -0.011019], timestamp: 322368678 }, { type: "session_drop", coord: [51.499181, -0.178182], timestamp: 324278878 }, { type: "engineer", coord: [58.242793, -4.553242], timestamp: 6527397236 }];
 
+          _this.builder = new Builder();
+          _this.presenter = new Presenter(options.symbols);
+          _this.markers = L.layerGroup([]);
           return _this;
         }
 
         _createClass(EventsMapCtrl, [{
           key: 'onDataReceived',
           value: function onDataReceived(data) {
-            // this.data = data
-            console.log("received");
-            console.log(data);
+            this.data = [];
             this.render();
           }
         }, {
           key: 'onRender',
           value: function onRender() {
-            // var curr_bounds = this.map.getBounds() 
+            // var curr_center = this.map.getCenter() 
             this.map.invalidateSize();
             this.markers.clearLayers();
-            this.data.forEach(this._addEventLayer, this);
-            // this.map.fitBounds(curr_bounds)
-            this.map.fitBounds([this.options.map.view.top_left, this.options.map.view.bottom_right]);
+
+            this.events = this.builder.call(this.data);
+            this.presenter.call(this.events);
+            this.marker.call(this.markers, this.events);
+            // this.map.setView(curr_center) 
           }
         }, {
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
             var mapElem = elem.find('#map')[0];
+            var topLeft = this.options.map.view.top_left;
+            var bottomRight = this.options.map.view.bottom_right;
+
             ctrl.map = L.map(mapElem, { worldCopyJump: true });
             this._initializeMap();
-          }
-        }, {
-          key: '_addEventLayer',
-          value: function _addEventLayer(event) {
-            this.markers.addLayer(L.marker(event.coord, {
-              icon: L.VectorMarkers.icon({
-                icon: this.options.symbols[event.type].icon,
-                prefix: 'fa',
-                markerColor: this.options.symbols[event.type].color
-              })
-            }));
+            this.map.fitBounds([topLeft, bottomRight]);
           }
         }, {
           key: '_initializeMap',
           value: function _initializeMap() {
+            L.VectorMarkers = {};
+            L.VectorMarkers.MAP_PIN = pinPath;
             L.tileLayer(this.options.map.base_layer, {
               attribution: this.options.map.attribution,
               maxZoom: this.options.map.view.max_zoom,
+              zoom: 5,
               reuseTiles: true
             }).addTo(this.map);
 
-            this.map.attributionControl.setPrefix('');
+            // this.map.attributionControl.setPrefix('')
             this.markers.addTo(this.map);
-
-            injectVectorMarkers();
           }
         }, {
           key: 'onInitEditMode',

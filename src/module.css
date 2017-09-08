@@ -3,11 +3,14 @@
   stroke-opacity: 0.4;
   stroke-width: 1;
 }
+.icon {
+  color: white;
+}
 
 .vector-marker i {
   position: absolute;
   top: 8px;
-  left: 0;
+    left: 0;
   width: 30px;
   color: #333;
   margin: auto;
