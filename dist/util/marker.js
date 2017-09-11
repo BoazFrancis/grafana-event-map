@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['lodash'], function (_export, _context) {
+System.register(['./wrapper'], function (_export, _context) {
   "use strict";
 
-  var _, _createClass, Presenter;
+  var Wrapper, _createClass, Marker;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -12,8 +12,8 @@ System.register(['lodash'], function (_export, _context) {
   }
 
   return {
-    setters: [function (_lodash) {
-      _ = _lodash.default;
+    setters: [function (_wrapper) {
+      Wrapper = _wrapper.Wrapper;
     }],
     execute: function () {
       _createClass = function () {
@@ -34,30 +34,32 @@ System.register(['lodash'], function (_export, _context) {
         };
       }();
 
-      _export('Presenter', Presenter = function () {
-        function Presenter(templates) {
-          _classCallCheck(this, Presenter);
+      _export('Marker', Marker = function () {
+        function Marker(markerLayer) {
+          _classCallCheck(this, Marker);
 
-          this.templates = templates;
+          this.markerLayer = markerLayer;
         }
 
-        _createClass(Presenter, [{
+        _createClass(Marker, [{
           key: 'call',
-          value: function call(events) {
-            events.forEach(this._setIcon.bind(this));
+          value: function call(markers) {
+            this.markerLayer.clearLayers();
+            markers.forEach(this._addMarker.bind(this));
           }
         }, {
-          key: '_setIcon',
-          value: function _setIcon(event) {
-            event.icon = _.find(this.templates, { name: event.name });
+          key: '_addMarker',
+          value: function _addMarker(marker) {
+            var options = { icon: new Wrapper(marker) };
+            this.markerLayer.addLayer(L.marker(marker.coord, options));
           }
         }]);
 
-        return Presenter;
+        return Marker;
       }());
 
-      _export('Presenter', Presenter);
+      _export('Marker', Marker);
     }
   };
 });
-//# sourceMappingURL=presenter.js.map
+//# sourceMappingURL=marker.js.map

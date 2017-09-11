@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['./external/leaflet/leaflet'], function (_export, _context) {
+System.register(['../external/leaflet/leaflet'], function (_export, _context) {
   "use strict";
 
-  var leaflet, _createClass, Marker;
+  var leaflet, _createClass, pinPath, Wrapper;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -58,38 +58,37 @@ System.register(['./external/leaflet/leaflet'], function (_export, _context) {
         };
       }();
 
-      _export('Marker', Marker = function (_L$Icon) {
-        _inherits(Marker, _L$Icon);
+      pinPath = 'M16,1 C7.7146,1 1,7.65636364 1,15.8648485 C1,' + '24.0760606 16,51 16,51 C16,51 31,24.0760606 31,' + '15.8648485 C31,7.65636364 24.2815,1 16,1 L16,1 Z';
 
-        function Marker(markers, overrideOptions) {
-          _classCallCheck(this, Marker);
+      _export('Wrapper', Wrapper = function (_L$Icon) {
+        _inherits(Wrapper, _L$Icon);
 
-          var _this = _possibleConstructorReturn(this, (Marker.__proto__ || Object.getPrototypeOf(Marker)).call(this));
+        function Wrapper(marker) {
+          _classCallCheck(this, Wrapper);
 
-          var options = Object.assign(overrideOptions, {
-            iconSize: [30, 50],
-            iconAnchor: [15, 50]
-            // iconColor: "white"
-          });
+          var _this = _possibleConstructorReturn(this, (Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).call(this));
 
-          _this.options = L.Util.setOptions(_this, options);
+          _this.marker = marker;
           return _this;
         }
 
-        _createClass(Marker, [{
-          key: 'call',
-          value: function call(events) {
-            this.markers.addLayer(L.marker(event.coord, {
-              icon: new Markers({
-                icon: this.options.symbols[event.type].icon,
-                markerColor: this.options.symbols[event.type].color
-              })
-            }));
-            var div = document.createElement("div");
+        _createClass(Wrapper, [{
+          key: 'createIcon',
+          value: function createIcon() {
+            var div = document.createElement('div');
             this._setInnerHTML(div);
             this._setClass(div);
             this._setStyle(div);
             return div;
+          }
+        }, {
+          key: '_setInnerHTML',
+          value: function _setInnerHTML(div) {
+            var markerColor = this.marker.icon.markerColor;
+            var iconClass = 'fa fa-' + this.marker.icon.class;
+            var iconColor = this.marker.icon.iconColor;
+
+            div.innerHTML = '<svg viewBox="0 0 30 50">' + ('<path d="' + pinPath + '" fill="' + markerColor + '"/>') + ('<i style="color:' + iconColor + '" class="' + iconClass + ' icon"/>') + '</svg>';
           }
         }, {
           key: '_setClass',
@@ -97,33 +96,23 @@ System.register(['./external/leaflet/leaflet'], function (_export, _context) {
             div.className = 'vector-marker-icon vector-marker';
           }
         }, {
-          key: '_setInnerHTML',
-          value: function _setInnerHTML(div) {
-            var pinPath = L.VectorMarkers.MAP_PIN;
-            var markerColor = this.options.markerColor;
-            var iconClass = 'fa fa-' + this.options.icon;
-            var iconColorStyle = this.options.iconColor;
-
-            div.innerHTML = '<svg viewBox="0 0 30 50">' + ('<path d="' + pinPath + '" fill="' + markerColor + '"/>') + ('<i style="color:' + iconColorStyle + '" class="' + iconClass + ' icon"/>') + '</svg>';
-          }
-        }, {
           key: '_setStyle',
           value: function _setStyle(div) {
-            var size = L.point(this.options.iconSize);
-            var anchor = L.point(this.options.iconAnchor);
+            var size = L.point(this.marker.icon.size);
+            var anchor = L.point(this.marker.icon.anchor);
 
-            div.style.marginLeft = -anchor.x + "px";
-            div.style.marginTop = -anchor.y + "px";
-            div.style.width = size.x + "px";
-            div.style.height = size.y + "px";
+            div.style.marginLeft = -anchor.x + 'px';
+            div.style.marginTop = -anchor.y + 'px';
+            div.style.width = size.x + 'px';
+            div.style.height = size.y + 'px';
           }
         }]);
 
-        return Marker;
+        return Wrapper;
       }(L.Icon));
 
-      _export('Marker', Marker);
+      _export('Wrapper', Wrapper);
     }
   };
 });
-//# sourceMappingURL=markers.js.map
+//# sourceMappingURL=wrapper.js.map
