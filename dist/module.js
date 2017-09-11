@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['lodash', './module.css!', 'app/plugins/sdk', './external/leaflet/leaflet', './external/leaflet/leaflet.css!', './external/font-awesome-4.7.0/css/font-awesome.min.css!', './util/builder', './util/presenter', './util/marker', './util/wrapper'], function (_export, _context) {
+System.register(['lodash', './module.css!', './external/leaflet/leaflet', './external/leaflet/leaflet.css!', './external/font-awesome-4.7.0/css/font-awesome.min.css!', 'app/plugins/sdk', './util/builder', './util/presenter', './util/marker', './util/wrapper'], function (_export, _context) {
   "use strict";
 
-  var _, MetricsPanelCtrl, leaflet, leafletCSS, fontawesome, Builder, Presenter, Marker, Wrapper, _createClass, options, panelDefaults, EventsMapCtrl;
+  var _, leaflet, leafletCSS, fontawesome, MetricsPanelCtrl, Builder, Presenter, Marker, Wrapper, _createClass, options, panelDefaults, EventsMapCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -38,14 +38,14 @@ System.register(['lodash', './module.css!', 'app/plugins/sdk', './external/leafl
   return {
     setters: [function (_lodash) {
       _ = _lodash.default;
-    }, function (_moduleCss) {}, function (_appPluginsSdk) {
-      MetricsPanelCtrl = _appPluginsSdk.MetricsPanelCtrl;
-    }, function (_externalLeafletLeaflet) {
+    }, function (_moduleCss) {}, function (_externalLeafletLeaflet) {
       leaflet = _externalLeafletLeaflet;
     }, function (_externalLeafletLeafletCss) {
       leafletCSS = _externalLeafletLeafletCss;
     }, function (_externalFontAwesome470CssFontAwesomeMinCss) {
       fontawesome = _externalFontAwesome470CssFontAwesomeMinCss;
+    }, function (_appPluginsSdk) {
+      MetricsPanelCtrl = _appPluginsSdk.MetricsPanelCtrl;
     }, function (_utilBuilder) {
       Builder = _utilBuilder.Builder;
     }, function (_utilPresenter) {
